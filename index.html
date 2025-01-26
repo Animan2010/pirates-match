@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+       <title>Raccoon Adventures Match 3</title>
+       <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+       <meta id="gameViewport" name="viewport" content="width=device-width initial-scale=1 shrink-to-fit=no user-scalable=no viewport-fit=cover">
+       <link href="styles.css" rel="stylesheet" type="text/css">
+       <link rel="stylesheet" type="text/css" href="./instant-games-bridge-vk-banner-extension.css">
+</head>
+
+<body>
+<!--
+<a class="superdev" href="javascript:%7B%20window.__gwt_bookmarklet_params%20%3D%20%7B'server_url'%3A'http%3A%2F%2Flocalhost%3A9876%2F'%7D%3B%20var%20s%20%3D%20document.createElement('script')%3B%20s.src%20%3D%20'http%3A%2F%2Flocalhost%3A9876%2Fdev_mode_on.js'%3B%20void(document.getElementsByTagName('head')%5B0%5D.appendChild(s))%3B%7D">&#8635;</a>
+-->
+<div align="center" id="embed-html"></div>
+<script type="text/javascript" src="html/html.nocache.js"></script>
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+
+<script type="module">
+              const urlParams = new URLSearchParams(window.location.search);
+              const player_id = urlParams.get('viewer_id');
+
+              window.InitVkWebApp = function initVkWebApp() {
+                     vkBridge.send('VKWebAppInit')
+                              .then((data) => {
+                                if (data.result) {
+                                  // Приложение инициализировано
+                                  vkBridge.send('VKWebAppShowBannerAd', {
+                                     banner_location: 'bottom'
+                                     })
+                                    .then((data) => {
+                                       if (data.result) {
+                                         // Баннерная реклама отобразилась
+                                       }
+                                     })
+                                     .catch((error) => {
+                                       // Ошибка
+                                       console.log(error);
+                                     });
+                                } else {
+                                  // Ошибка
+                                }
+                              })
+                              .catch((error) => {
+                                // Ошибка
+                                console.log(error);
+                              });
+              }
+
+              window.InitVkWebApp();
+
+              window.ShowBanner = function showBanner() {
+
+              }
+
+              window.ShowInterstitial = function showInterstitial() {
+                     vkBridge.send("VKWebAppShowNativeAds", {"ad_format": "interstitial"});
+              }
+
+              window.ShowRewarded = function showRewarded() {
+                     vkBridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
+                            .then(data => window.OnRewardedVideoShown(data.result))
+                            .catch(error => console.log(error));
+              }
+
+              window.BuyInApp = function buyInApp(inapp_id) {
+                     vkBridge.send("VKWebAppShowOrderBox", {type:"item",item:inapp_id})
+                       .then(data => window.OnInAppBought(data.success, inapp_id))
+                       .catch(error => console.log(error));
+              }
+
+              window.GetKey = function getKey(key) {
+                     vkBridge.send("VKWebAppStorageGet", {"keys": [key]})
+                            .then(data => window.OnGetKey(key, data.keys[0].value))
+                            .catch(error => console.log(error));
+              }
+
+              window.SetKey = function setKey(k, v) {
+                     vkBridge.send("VKWebAppStorageSet", {
+                        key: k,
+                        value: v
+                     });
+              }
+
+              window.CheckRewarded = function checkRewarded() {
+                     vkBridge.send("VKWebAppCheckNativeAds", {ad_format:"reward"})
+                            .then(data => window.OnRewardedVideoCheck(data.result))
+                            .catch(error => console.log(error));
+              }
+
+              window.CheckInterstitial = function checkInterstitial() {
+                     vkBridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"})
+                            .then(data => console.log(data.result))
+                            .catch(error => console.log(error));
+              }
+
+              window.ShareLevel = function shareLevel(lvl) {
+              }
+
+              window.SetRecord = function setRecord(lvl) {
+                     vkBridge.send("VKWebAppCallAPIMethod",
+                     {"method": "secure.addAppEvent", "request_id": "set_record",
+                     "params": {
+                            "user_id": player_id,
+                            "activity_id":"1",
+                            "value":lvl
+                            }});
+              }
+
+              window.InviteFriends = function inviteFriends() {
+                     vkBridge.send("VKWebAppShowInviteBox", {})
+                             .then(data => console.log(data.success))
+                             .catch(error => console.log(error));
+              }
+
+              window.ShowRecords = function showRecords(lvl) {
+                     vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:lvl})
+                            .then(data => console.log(data.success))
+                            .catch(error => console.log(error));
+              }
+
+              function handleMouseDown(evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+                window.focus();
+              }
+
+              function handleMouseUp(evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+              }
+              document.addEventListener('contextmenu', event => event.preventDefault());
+              document.getElementById('embed-html').addEventListener('mousedown', handleMouseDown, false);
+              document.getElementById('embed-html').addEventListener('mouseup', handleMouseUp, false);
+       </script>
+
+</body>
+
+</html>
